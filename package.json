@@ -1,0 +1,29 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jarrisonn/todo-list.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jarrisonn/todo-list/issues"
+  },
+  "homepage": "https://github.com/Jarrisonn/todo-list#readme",
+  "devDependencies": {
+    "css-loader": "^6.2.0",
+    "date-fns": "^2.23.0",
+    "file-loader": "^6.2.0",
+    "style-loader": "^3.2.1",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0"
+  }
+}

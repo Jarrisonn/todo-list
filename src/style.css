@@ -1,0 +1,17 @@
+*,*::before,*::after{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.project-container{
+    margin-bottom: 5rem;
+}
+
+#project-list{
+    display:flex;
+    gap: 10rem;
+}
+
+.selected{
+    background-color: green;
+}
