@@ -15,3 +15,11 @@
 .selected{
     background-color: green;
 }
+button{
+    width: 5rem;
+    height:2rem;
+}
+form{
+    display: flex;
+    flex-direction: column;
+}
