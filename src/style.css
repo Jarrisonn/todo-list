@@ -2,9 +2,17 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    
 }
 .project-container{
+    font-family: 'Open Sans';
+    font-size: 2.5rem;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 5rem;
+    flex-direction: column;
 }
 
 #project-list{
@@ -16,10 +24,47 @@
     background-color: green;
 }
 button{
-    width: 5rem;
-    height:2rem;
+    font-family: 'Open Sans';
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    border: 3px solid rebeccapurple;
 }
 form{
     display: flex;
     flex-direction: column;
+}
+.red{
+    background-color: rgb(187, 38, 38);
+}
+
+.yellow{
+    background-color: rgb(212, 212, 60);
+}
+
+.green{
+    background-color: rgb(48, 112, 48);
+}
+.todo-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.todo{
+    font-family: 'Open Sans';
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 1rem;
+    min-width: 450px;
+    min-height: 160px;
+    padding: 3rem 2rem; 
+    border-radius: 10%;   
+}
+.todo > :nth-child(1){
+    margin-bottom: 20px;
+    font-size: 3rem;
+}
+.hidden{
+    width:0;
+    height:0;
 }

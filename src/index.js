@@ -1,5 +1,6 @@
 import { compareAsc, format } from "date-fns";
 import "./style.css";
+
 const projectContainer = document.querySelector(".project-container");
 const todoContainer = document.querySelector(".todo-container");
 const createTodoContainer = document.querySelector(".create-todo");
@@ -49,8 +50,8 @@ const newTodo = new Todo(
   "desc",
   new Date(),
   "Monday 10th",
-  "High",
-  false,
+  "2",
+  true,
   "default"
 );
 const newTodo1 = new Todo(
@@ -58,7 +59,7 @@ const newTodo1 = new Todo(
   "desc1",
   new Date(),
   "Tuesday 11th",
-  "Low",
+  "5",
   false,
   "secondList"
 );
@@ -67,18 +68,25 @@ const newTodo2 = new Todo(
   "desc1",
   new Date(),
   "Tuesday 11th",
-  "Low",
+  "8",
   false,
   "thirdList"
 );
 
-const defaultProject = new Project("default", [newTodo], true);
+const defaultProject = new Project(
+    "default", 
+    [newTodo], 
+    true
+);
 const secondProject = new Project(
   "secondProject",
   [newTodo1, newTodo, newTodo],
   false
 );
-const thirdProject = new Project("thirdProject", [newTodo2], false);
+const thirdProject = new Project("thirdProject", 
+[newTodo2], 
+false
+);
 
 let projectList = [defaultProject, secondProject, thirdProject];
 
@@ -87,25 +95,69 @@ const showTodoDom = () => {
     if (project.selected === true) {
       project.todosList.forEach((todo) => {
         const item = document.createElement("ul");
-        const projectNameEl = document.createElement("h2");
         const todoTitleEl = document.createElement("h2");
         const todoDescEl = document.createElement("h3");
         const todoDueDateEl = document.createElement("h3");
         const todoPriorityEl = document.createElement("h3");
+        const todoStatusEl = document.createElement("h3");
+        const deleteBtnEl = document.createElement("button")
 
-        projectNameEl.innerText = project.name;
+        console.log(todo.project);
+        deleteBtnEl.innerHTML = `<i class="fas fa-trash"></i>`
+        deleteBtnEl.addEventListener("click", () => {
+            removeTodoDom();
+            removeTodo(project, todo);
+        });
+        
         todoTitleEl.innerText = todo.title;
-        todoDescEl.innerText = todo.description;
-        todoDueDateEl.innerText = todo.dueDate;
-        todoPriorityEl.innerText = todo.priority;
+        item.addEventListener("mouseenter", () => {
+            todoDescEl.innerText = todo.description;
+            todoDueDateEl.innerText = todo.dueDate;
+        })
+        item.addEventListener("mouseleave", () => {
+            todoDescEl.innerText = "";
+            todoDueDateEl.innerText = ""
+        })
+        item.addEventListener("click", () => {
+            todoDescEl.innerText = todo.description;
+            todoDueDateEl.innerText = todo.dueDate;
+        })
+        
+        
+        if (todo.status === false) {
+            todoStatusEl.innerHTML = `Todo Status: Incomplete <i class="fas fa-times-circle"></i>`;
+            
+        }else{
+            todoStatusEl.innerHTML = `Todo Status: Complete <i class="fas fa-check-square"></i>`;
+        }
 
+        //Change from complete to uncomplete 
+        todoStatusEl.addEventListener("click", () => {
+            todo.changeStatus();
+            clearTodoDom();
+            showTodoDom();
+        })
+        
+        todoPriorityEl.innerText = todo.priority;
+        if (todo.priority <= 3) {
+            item.classList.add("red")
+            
+        }else if(todo.priority > 4 && todo.priority < 7){
+            item.classList.add("yellow")
+        }else if(todo.priority >= 8){
+            item.classList.add("green")
+        }
+
+        
         item.classList.add("todo");
 
-        item.appendChild(projectNameEl);
+        
         item.appendChild(todoTitleEl);
         item.appendChild(todoDescEl);
         item.appendChild(todoDueDateEl);
         item.appendChild(todoPriorityEl);
+        item.appendChild(todoStatusEl);
+        item.appendChild(deleteBtnEl)
         todoContainer.appendChild(item);
       });
     }
@@ -113,6 +165,26 @@ const showTodoDom = () => {
 };
 
 showTodoDom();
+
+const removeTodoDom = () => {
+    const todo = document.querySelector(".todo")
+    todo.remove();
+}
+const removeTodo = (project, todo) => {
+    console.log(todo);
+    console.log(project);
+    if (project.todosList.includes(todo)){
+       let index = project.todosList.indexOf(todo)
+       project.todosList.splice(index,1);
+       clearTodoDom();
+       showTodoDom();
+        
+    }
+   
+   
+   
+    
+}
 
 const clearTodoDom = () => {
   todoContainer.innerHTML = "";
@@ -211,15 +283,7 @@ const createProject = (name) => {
 };
 
 
-const getProjectName = () => {
-    projectList.forEach(project => {
-        if(project.selected){
-            console.log(project.name);
-            return project.name
-            
-        }
-    })
-}
+
 
 
 const createTodoDom = () => {
@@ -227,27 +291,38 @@ const createTodoDom = () => {
   const createTodoButton = document.createElement("button");
   createTodoButton.innerText = "Add a new todo!";
   createTodoButton.addEventListener("click", () => {
-    let fName = getProjectName();
 
-      console.log(fName);
+    todoContainer.classList.add("hidden");
+    const todoEl = document.querySelector(".todo")
+    todoEl.remove();
+    
     const form = document.createElement("form");
+
     const titleInput = document.createElement("input");
     const titleLabel = document.createElement("label");
     titleLabel.innerText = "Please enter a title for the todo";
+
     const descriptionInput = document.createElement("input");
     const descriptionLabel = document.createElement("label");
     descriptionLabel.innerText = "Please enter a description of the todo";
+
     const dueDateInput = document.createElement("input");
     dueDateInput.type = "date";
     const dueDateLabel = document.createElement("label");
     dueDateLabel.innerText = "Please enter the due date of the todo";
+
     const priorityInput = document.createElement("input");
+    priorityInput.type = "range"
+    priorityInput.min = "1"
+    priorityInput.max = "10"
     const priorityLabel = document.createElement("label");
-    priorityLabel.innerText = "Please enter the priority of the todo";
+    priorityLabel.innerText = "Please enter the priority of the todo from 1 to 10, 1 being most important with 10 being least important";
+
     const projectNameInput = document.createElement("input");
     const projectNameLabel = document.createElement("label");
     projectNameLabel.innerText =
       "Please enter the name of the project for the todo to go on ";
+
     const submitButton = document.createElement("button");
     submitButton.innerText = "Submit new Todo!";
     submitButton.addEventListener("click", (e) => {
@@ -260,6 +335,10 @@ const createTodoDom = () => {
         projectNameInput.value
       );
       createTodoContainer.removeChild(form);
+      todoContainer.classList.remove("hidden")
+      clearTodoDom();
+      showTodoDom();
+
     });
 
     form.appendChild(titleLabel);
@@ -299,3 +378,4 @@ const createTodo = (title, description, dueDate, priority, projectName) => {
   clearTodoDom();
   showTodoDom();
 };
+
