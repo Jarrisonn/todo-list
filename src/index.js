@@ -73,20 +73,13 @@ const newTodo2 = new Todo(
   "thirdList"
 );
 
-const defaultProject = new Project(
-    "default", 
-    [newTodo], 
-    true
-);
+const defaultProject = new Project("default", [newTodo], true);
 const secondProject = new Project(
   "secondProject",
   [newTodo1, newTodo, newTodo],
   false
 );
-const thirdProject = new Project("thirdProject", 
-[newTodo2], 
-false
-);
+const thirdProject = new Project("thirdProject", [newTodo2], false);
 
 let projectList = [defaultProject, secondProject, thirdProject];
 
@@ -100,64 +93,61 @@ const showTodoDom = () => {
         const todoDueDateEl = document.createElement("h3");
         const todoPriorityEl = document.createElement("h3");
         const todoStatusEl = document.createElement("h3");
-        const deleteBtnEl = document.createElement("button")
+        const deleteBtnEl = document.createElement("button");
 
-        console.log(todo.project);
-        deleteBtnEl.innerHTML = `<i class="fas fa-trash"></i>`
+        deleteBtnEl.innerHTML = `<i class="fas fa-trash"></i>`;
         deleteBtnEl.addEventListener("click", () => {
-            removeTodoDom();
-            removeTodo(project, todo);
+          removeTodoDom();
+          removeTodo(project, todo);
         });
-        
+
         todoTitleEl.innerText = todo.title;
         item.addEventListener("mouseenter", () => {
-            todoDescEl.innerText = todo.description;
-            todoDueDateEl.innerText = todo.dueDate;
-        })
+          todoDescEl.innerText = todo.description;
+          todoDueDateEl.innerText = todo.dueDate;
+        });
         item.addEventListener("mouseleave", () => {
-            todoDescEl.innerText = "";
-            todoDueDateEl.innerText = ""
-        })
+          todoDescEl.innerText = "";
+          todoDueDateEl.innerText = "";
+        });
         item.addEventListener("click", () => {
-            todoDescEl.innerText = todo.description;
-            todoDueDateEl.innerText = todo.dueDate;
-        })
-        
-        
+          todoDescEl.innerText = todo.description;
+          todoDueDateEl.innerText = todo.dueDate;
+        });
+
         if (todo.status === false) {
-            todoStatusEl.innerHTML = `Todo Status: Incomplete <i class="fas fa-times-circle"></i>`;
-            
-        }else{
-            todoStatusEl.innerHTML = `Todo Status: Complete <i class="fas fa-check-square"></i>`;
+          todoStatusEl.innerHTML = `Todo Status: Incomplete <i class="fas fa-times-circle"></i>`;
+        } else {
+          todoStatusEl.innerHTML = `Todo Status: Complete <i class="fas fa-check-square"></i>`;
         }
 
-        //Change from complete to uncomplete 
+        //Change from complete to uncomplete
         todoStatusEl.addEventListener("click", () => {
-            todo.changeStatus();
-            clearTodoDom();
-            showTodoDom();
-        })
-        
-        todoPriorityEl.innerText = todo.priority;
-        if (todo.priority <= 3) {
-            item.classList.add("red")
-            
-        }else if(todo.priority > 4 && todo.priority < 7){
-            item.classList.add("yellow")
-        }else if(todo.priority >= 8){
-            item.classList.add("green")
-        }
+          todo.changeStatus();
+          clearTodoDom();
+          showTodoDom();
+        });
 
         
+        if (todo.priority <= 3) {
+          item.classList.add("red");
+          todoPriorityEl.innerText = `The priority is high, set to ${todo.priority}`;
+        } else if (todo.priority > 4 && todo.priority < 7) {
+          item.classList.add("yellow");
+          todoPriorityEl.innerText = `The priority is medium, set to ${todo.priority}`;
+        } else if (todo.priority >= 8) {
+          item.classList.add("green");
+          todoPriorityEl.innerText = `The priority is low, set to ${todo.priority}`;
+        }
+
         item.classList.add("todo");
 
-        
         item.appendChild(todoTitleEl);
         item.appendChild(todoDescEl);
         item.appendChild(todoDueDateEl);
         item.appendChild(todoPriorityEl);
         item.appendChild(todoStatusEl);
-        item.appendChild(deleteBtnEl)
+        item.appendChild(deleteBtnEl);
         todoContainer.appendChild(item);
       });
     }
@@ -167,24 +157,19 @@ const showTodoDom = () => {
 showTodoDom();
 
 const removeTodoDom = () => {
-    const todo = document.querySelector(".todo")
-    todo.remove();
-}
+  const todo = document.querySelector(".todo");
+  todo.remove();
+};
 const removeTodo = (project, todo) => {
-    console.log(todo);
-    console.log(project);
-    if (project.todosList.includes(todo)){
-       let index = project.todosList.indexOf(todo)
-       project.todosList.splice(index,1);
-       clearTodoDom();
-       showTodoDom();
-        
-    }
-   
-   
-   
-    
-}
+  console.log(todo);
+  console.log(project);
+  if (project.todosList.includes(todo)) {
+    let index = project.todosList.indexOf(todo);
+    project.todosList.splice(index, 1);
+    clearTodoDom();
+    showTodoDom();
+  }
+};
 
 const clearTodoDom = () => {
   todoContainer.innerHTML = "";
@@ -195,17 +180,28 @@ const clearProjectDom = () => {
 
 const showProjectListDom = () => {
   clearProjectDom();
+  let i = 1;
   const projectListEl = document.createElement("ul");
   projectListEl.classList.add("project-list");
-  projectList.forEach((project) => {
-    const projectNameEl = document.createElement("h2");
-    projectNameEl.innerText = project.name;
-    projectListEl.appendChild(projectNameEl);
-    projectContainer.appendChild(projectListEl);
-    if (project.selected) {
-      projectNameEl.classList.add("selected");
-    } else if (!project.selected) {
-      projectNameEl.classList.remove("selected");
+  const showProjectsButton = document.createElement("button");
+  showProjectsButton.innerText = "Show Projects List";
+  projectListEl.appendChild(showProjectsButton);
+  projectContainer.appendChild(projectListEl);
+  showProjectsButton.addEventListener("click", () => {
+    showProjectsButton.innerText = "Hide Projects List";
+    if (i % 2 === 1) {
+      console.log(i);
+      i++;
+      projectList.forEach((project) => {
+        const projectNameEl = document.createElement("h2");
+        projectNameEl.classList.add("project");
+        projectNameEl.innerText = project.name;
+        projectListEl.appendChild(projectNameEl);
+      });
+    } else {
+      showProjectListDom();
+      selectProjectDom();
+      createProjectDom();
     }
   });
 };
@@ -217,7 +213,9 @@ const selectProjectDom = () => {
     projectListEl.childNodes.forEach((node) => {
       node.classList.remove("selected");
     });
-    e.target.classList.add("selected");
+    if (e.target.nodeName === "H2") {
+      e.target.classList.add("selected");
+    }
 
     setProjectAsDeselected(e.target.innerText);
     setProjectAsSelected(e.target.innerText);
@@ -246,27 +244,44 @@ const setProjectAsDeselected = (projectName) => {
 const createProjectDom = () => {
   const createProjectButton = document.createElement("button");
   createProjectButton.innerText = "Create a new Project!";
+  createProjectButton.classList.add("create-project-button")
   createProjectButton.addEventListener("click", () => {
     const form = document.createElement("form");
 
+
+    form.classList.add("create-project")
+    todoContainer.classList.add("hidden")
+    
     const projectNameInput = document.createElement("input");
     const projectNameLabel = document.createElement("label");
     const projectSubmitButton = document.createElement("button");
+    const projectCancelButton = document.createElement("button")
 
     projectNameLabel.htmlFor = "name";
     projectNameLabel.innerText = "Please enter a name for your project \n";
     projectNameInput.name = "name";
 
     projectSubmitButton.innerText = "Submit";
+    projectCancelButton.innerHTML = `<i class="fas fa-trash"></i>`
+    projectCancelButton.classList.add("cancel-project")
+    
+    projectCancelButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        form.remove();
+        todoContainer.classList.remove("hidden")
+    })
 
     form.appendChild(projectNameLabel);
     form.appendChild(projectNameInput);
     form.appendChild(projectSubmitButton);
-    todoContainer.appendChild(form);
+    form.appendChild(projectCancelButton)
+    projectContainer.appendChild(form);
 
     projectSubmitButton.addEventListener("click", (e) => {
       e.preventDefault();
       createProject(projectNameInput.value);
+      form.remove();
+      todoContainer.classList.remove("hidden")
     });
   });
   projectContainer.appendChild(createProjectButton);
@@ -282,20 +297,15 @@ const createProject = (name) => {
   createProjectDom();
 };
 
-
-
-
-
 const createTodoDom = () => {
-    
   const createTodoButton = document.createElement("button");
   createTodoButton.innerText = "Add a new todo!";
+  
   createTodoButton.addEventListener("click", () => {
-
+      createTodoButton.classList.add("hidden")
     todoContainer.classList.add("hidden");
-    const todoEl = document.querySelector(".todo")
-    todoEl.remove();
-    
+   
+
     const form = document.createElement("form");
 
     const titleInput = document.createElement("input");
@@ -312,21 +322,29 @@ const createTodoDom = () => {
     dueDateLabel.innerText = "Please enter the due date of the todo";
 
     const priorityInput = document.createElement("input");
-    priorityInput.type = "range"
-    priorityInput.min = "1"
-    priorityInput.max = "10"
+    priorityInput.type = "range";
+    priorityInput.min = "1";
+    priorityInput.max = "10";
     const priorityLabel = document.createElement("label");
-    priorityLabel.innerText = "Please enter the priority of the todo from 1 to 10, 1 being most important with 10 being least important";
+    priorityLabel.innerText =
+      "Please enter the priority of the todo from 1 to 10, 1 being most important with 10 being least important";
 
     const projectNameInput = document.createElement("input");
     const projectNameLabel = document.createElement("label");
     projectNameLabel.innerText =
       "Please enter the name of the project for the todo to go on ";
+      projectList.forEach(project => {
+        if(project.selected){
+            projectNameInput.value = project.name
+        }
+    })
+    
 
     const submitButton = document.createElement("button");
     submitButton.innerText = "Submit new Todo!";
     submitButton.addEventListener("click", (e) => {
       e.preventDefault();
+      createTodoButton.classList.remove("hidden")
       createTodo(
         titleInput.value,
         descriptionInput.value,
@@ -335,10 +353,18 @@ const createTodoDom = () => {
         projectNameInput.value
       );
       createTodoContainer.removeChild(form);
-      todoContainer.classList.remove("hidden")
+      todoContainer.classList.remove("hidden");
       clearTodoDom();
       showTodoDom();
-
+    });
+    const cancelButton = document.createElement("button");
+    cancelButton.innerHTML = `<i class="fas fa-trash"></i>`;
+    cancelButton.classList.add("cancel-todo")
+    cancelButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      createTodoButton.classList.remove("hidden")
+      form.remove();
+      todoContainer.classList.remove("hidden");
     });
 
     form.appendChild(titleLabel);
@@ -352,6 +378,8 @@ const createTodoDom = () => {
     form.appendChild(projectNameLabel);
     form.appendChild(projectNameInput);
     form.appendChild(submitButton);
+
+    form.appendChild(cancelButton);
     createTodoContainer.appendChild(form);
   });
 
@@ -378,4 +406,3 @@ const createTodo = (title, description, dueDate, priority, projectName) => {
   clearTodoDom();
   showTodoDom();
 };
-
