@@ -189,6 +189,7 @@ const removeTodo = (project, todo) => {
     project.todosList.splice(index, 1);
     clearTodoDom();
     showTodoDom();
+    localStorage.setItem("projectList",JSON.stringify(projectList))
   }
 };
 
